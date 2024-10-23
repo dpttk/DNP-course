@@ -19,6 +19,21 @@ steps:
     inputs:
       versionSpec: '$(python.version)'
     displayName: 'Use Python $(python.version)'
+  
+  - task: ArchiveFiles@2
+    displayName: 'Archive files'
+    inputs:
+      rootFolderOrFile: $(System.DefaultWorkingDirectory)
+      includeRootFolder: false
+      archiveType: zip
+      archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-$(python.version).zip
+      replaceExistingArchive: true
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+      ArtifactName: 'drop'
+      publishLocation: 'Container'
 
   - script: python3 server $(port) $(max_clients) &
     displayName: 'Run a server'
