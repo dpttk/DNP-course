@@ -23,9 +23,8 @@ steps:
   - task: PythonScript@0
     inputs:
       scriptSource: 'filePath'
-      scriptPath: 'server.py'
+      scriptPath: './Lab-01/src/server/server.py'
       arguments: '$(port) $(max_clients)'
-      workingDirectory: './Lab-01/src/server/'
       failOnStderr: true
 
   - task: PythonScript@0
