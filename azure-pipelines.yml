@@ -25,7 +25,7 @@ steps:
       scriptSource: 'filePath'
       scriptPath: 'server.py'
       arguments: '$(port) $(max_clients)'
-      workingDirectory: '/Lab-01/src/server/'
+      workingDirectory: './Lab-01/src/server/'
       failOnStderr: true
 
   - task: PythonScript@0
@@ -33,6 +33,6 @@ steps:
       scriptSource: 'filePath'
       scriptPath: 'client.py'
       arguments: '127.0.0.1:$(port) note1.txt'
-      workingDirectory: '/Lab-01/src/client/'
+      workingDirectory: './Lab-01/src/client/'
       failOnStderr: true
 
