@@ -20,34 +20,19 @@ steps:
       versionSpec: '$(python.version)'
     displayName: 'Use Python $(python.version)'
   
-  - task: ArchiveFiles@2
-    displayName: 'Archive files'
+  - task: PythonScript@0
     inputs:
-      rootFolderOrFile: $(System.DefaultWorkingDirectory)
-      includeRootFolder: false
-      archiveType: zip
-      archiveFile: $(Build.ArtifactStagingDirectory)/$(Build.BuildId)-$(python.version).zip
-      replaceExistingArchive: true
+      scriptSource: 'filePath'
+      scriptPath: 'server.py'
+      arguments: '$(port) $(max_clients)'
+      workingDirectory: '/Lab-01/src/server/'
+      failOnStderr: true
 
-  - task: PublishBuildArtifacts@1
+  - task: PythonScript@0
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-      ArtifactName: 'drop'
-      publishLocation: 'Container'
+      scriptSource: 'filePath'
+      scriptPath: 'client.py'
+      arguments: '127.0.0.1:$(port) note1.txt'
+      workingDirectory: '/Lab-01/src/client/'
+      failOnStderr: true
 
-  - script: python3 server $(port) $(max_clients) &
-    displayName: 'Run a server'
-  
-  - script: |
-      python3 client.py 127.0.0.1:8080 note1.txt &
-      python3 client.py 127.0.0.1:8080 note2.txt &
-      python3 client.py 127.0.0.1:8080 note2.txt &
-      python3 client.py 127.0.0.1:8080 note4.txt &
-      python3 client.py 127.0.0.1:8080 note5.txt &
-      python3 client.py 127.0.0.1:8080 note6.txt &
-      python3 client.py 127.0.0.1:8080 note7.txt &
-      python3 client.py 127.0.0.1:8080 note8.txt &
-      python3 client.py 127.0.0.1:8080 note9.txt &
-      python3 client.py 127.0.0.1:8080 note10.txt &
-      python3 client.py 127.0.0.1:8080 note11.txt &
-    displayName: 'Run several users'
