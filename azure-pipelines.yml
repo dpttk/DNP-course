@@ -1,14 +1,38 @@
 
 trigger:
-- main
+  - main
+
+variables:
+  - name: port
+    value: 8080
+  - name: max_clients
+    value: 4
 
 pool: default
+strategy:
+  matrix:
+    Python310:
+      python.version: '3.10'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Use Python $(python.version)'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+  - script: python3 server $(port) $(max_clients) &
+    displayName: 'Run a server'
+  
+  - script: |
+      python3 client.py 127.0.0.1:8080 note1.txt &
+      python3 client.py 127.0.0.1:8080 note2.txt &
+      python3 client.py 127.0.0.1:8080 note2.txt &
+      python3 client.py 127.0.0.1:8080 note4.txt &
+      python3 client.py 127.0.0.1:8080 note5.txt &
+      python3 client.py 127.0.0.1:8080 note6.txt &
+      python3 client.py 127.0.0.1:8080 note7.txt &
+      python3 client.py 127.0.0.1:8080 note8.txt &
+      python3 client.py 127.0.0.1:8080 note9.txt &
+      python3 client.py 127.0.0.1:8080 note10.txt &
+      python3 client.py 127.0.0.1:8080 note11.txt &
+    displayName: 'Run several users'
