@@ -1,5 +1,5 @@
 import argparse
-import os
+import signal
 import socket
 
 MSS = 20476
@@ -15,6 +15,13 @@ class Client:
 def save(client: Client):
     with open(file=client.filename, mode="wb") as f:
         f.write(client.data)
+    print(f"Received {client.filename}")
+
+def shutdown(sig, frame):
+  print("Shutting down...")
+  exit(0)
+
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -28,12 +35,15 @@ if __name__ == "__main__":
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     server_socket.bind(('', port))
 
+    print("Listening...")
+
+    signal.signal(signal.SIGINT, shutdown)
+
     connected_clients = {}
 
     while True:
         message, address = server_socket.recvfrom(20476)
         message = message.decode()
-        print(message)
         if message.split('|')[0] == 's':
             if address not in connected_clients:
                 if client_number < len(connected_clients):
@@ -68,8 +78,6 @@ if __name__ == "__main__":
                 connected_clients.pop(address)
 
             server_socket.sendto(f"a|{seqno}".encode(),address)
-            print(_client.data)
         else:
-            print("bruh")
             exit(1)
 
