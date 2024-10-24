@@ -11,14 +11,10 @@ class Client:
         self.filename = filename
         self.data = bytearray()
         self.size = size
-    
-
-
 
 def save(client: Client):
     with open(file=client.filename, mode="wb") as f:
         f.write(client.data)
-        
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
