@@ -1,14 +1,15 @@
-
 trigger:
-- main
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - Lab-01
 
 pool: default
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: Bash@3
+  inputs:
+    filePath: 'Lab-01/src/test.sh'
+    workingDirectory: 'Lab-01/src/'
