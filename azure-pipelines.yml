@@ -7,4 +7,5 @@ pool: default
 steps:
 - task: Bash@3
   inputs:
-    filePath: 'Lab-01/src/test.sh'
+    filePath: 'test.sh'
+    workingDirectory: 'Lab-01/src/'
